@@ -3,32 +3,45 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: dthan <marvin@42.fr>                       +#+  +:+       +#+         #
+#    By: dthan <dthan@student.hive.fi>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/01/03 15:13:05 by dthan             #+#    #+#              #
-#    Updated: 2020/01/03 15:22:37 by dthan            ###   ########.fr        #
+#    Updated: 2026/05/28 16:50:03 by dthan            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = fdf
-CFLAGS = -Wall -Wextra -Werror
-SOURCE_CODE = srcs/main.c srcs/read.c
-INCLUDES = includes/
-FRAMEWORK = -framework OpenGL -framework Appkit
-LIB_DIR = /usr/local/lib/
-LIBFT_DIR = libft/
+COMPILER = clang
+PROGRAM_NAME = fdf
+CFLAGS = #-Wall -Wextra -Werror
+LDFLAGS = -framework OpenGL -framework AppKit
+LIBFT_DIR := ./libft
+LIBFT_FLAG := -L$(LIBFT_DIR)/ -lft
+SOURCES_DIR := ./src
+SOURCES_FILES := $(shell find $(SOURCES_DIR) -name '*.c')
+BUILD_DIR := ./build
+MATCHING_RULE := $(addprefix $(BUILD_DIR)/,$(notdir $(SOURCES_FILES:%.c=%.o)))
 
-all: $(NAME)
+all: mkdirs lft $(PROGRAM_NAME)
 
-$(NAME):
-		gcc $(SOURCE_CODE) -I libft/includes -L libft/ -lft -g
-#cc $(SOURCE_CODE) $(C_FLAGS) -I$(INCLUDES) -L $(LIB_DIR) -lmlx -L libft/ -lft $(FRAMEWORK)
+mkdirs:
+	@mkdir -p $(BUILD_DIR)
+
+lft:
+	@cd $(LIBFT_DIR) && $(MAKE)
+
+$(BUILD_DIR)/%.o: $(SOURCES_DIR)/%.c
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(PROGRAM_NAME): $(MATCHING_RULE)
+	$(COMPILER) $(CFLAGS) $(LDFLAGS) $(LIBFT_FLAG) $^ -o $@
 
 clean:
-	rm -f *.o
+	@cd $(LIBFT_DIR) && $(MAKE) -s clean
+	@rm -rf $(BUILD_DIR)
 
 fclean: clean
-	rm -f $(NAME)
+	@cd $(LIBFT_DIR) && $(MAKE) -s fclean
+	@rm -rf $(PROGRAM_NAME)
 
 re: fclean all
 
