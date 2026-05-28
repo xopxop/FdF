@@ -6,7 +6,7 @@
 #    By: dthan <dthan@student.hive.fi>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/01/03 15:13:05 by dthan             #+#    #+#              #
-#    Updated: 2026/05/28 16:50:03 by dthan            ###   ########.fr        #
+#    Updated: 2026/05/28 17:02:01 by dthan            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,7 +30,7 @@ lft:
 	@cd $(LIBFT_DIR) && $(MAKE)
 
 $(BUILD_DIR)/%.o: $(SOURCES_DIR)/%.c
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(COMPILER) $(CFLAGS) -c $< -o $@
 
 $(PROGRAM_NAME): $(MATCHING_RULE)
 	$(COMPILER) $(CFLAGS) $(LDFLAGS) $(LIBFT_FLAG) $^ -o $@
